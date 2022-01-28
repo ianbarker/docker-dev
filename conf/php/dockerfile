@@ -1,0 +1,16 @@
+FROM php:7.4-fpm
+
+# install the modules we need
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
+RUN install-php-extensions gd xdebug ds pdo_mysql redis
+
+# set xdebug config
+COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+# copy bash config
+COPY .bashrc /root
+
+# set up default site
+RUN mkdir -p /usr/local/apache2/htdocs
+RUN echo "<?php phpinfo();" >> /usr/local/apache2/htdocs/index.php

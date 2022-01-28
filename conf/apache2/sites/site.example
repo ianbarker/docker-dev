@@ -1,7 +1,7 @@
 <VirtualHost *:443>
     SSLEngine on
-    ServerName apiv1.reflow
-    DocumentRoot /var/www/api/public
+    ServerName <<client>>.reflow
+    DocumentRoot /var/www/craft/clients/<<client>>/public_html
     SSLCertificateFile	/usr/local/apache2/ssl/server.crt
     SSLCertificateKeyFile /usr/local/apache2/ssl/server.key
 </VirtualHost>

@@ -2,7 +2,7 @@ FROM php:7.4-apache
 RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
-    libpng-dev \
+    libpng-dev \ 
     default-mysql-client \
     ssl-cert \
     git \
@@ -44,3 +44,6 @@ RUN echo "ServerName localhost" | tee /etc/apache2/conf-available/fqdn.conf && a
 
 # set up default site
 RUN echo "<?php echo '<h1>Working!</h1>'; phpinfo();" >> /var/www/html/index.php
+
+# set xdebug config
+COPY conf/php/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini

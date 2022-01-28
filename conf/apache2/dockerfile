@@ -1,0 +1,18 @@
+FROM httpd:2.4
+
+# copy bash config
+COPY .bashrc /root
+
+# copy apache config
+COPY httpd.conf /usr/local/apache2/conf/httpd.conf
+COPY ssl.conf /usr/local/apache2/conf/extra/httpd-ssl.conf
+
+# ssl certificates
+COPY ssl/server.crt /usr/local/apache2/ssl/server.crt
+COPY ssl/server.key /usr/local/apache2/ssl/server.key
+
+# copy site configs
+COPY sites/*.conf /usr/local/apache2/vhosts/
+
+# set up default site
+RUN echo "<?php phpinfo();" >> /usr/local/apache2/htdocs/index.php

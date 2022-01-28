@@ -1,38 +1,65 @@
 version: "3.9"
+
 services:
-    db:
-        container_name: "mysql"
-        image: mysql/mysql-server:latest
-        ports:
-            - 3306:3306
-        environment:
-            - MYSQL_ROOT_PASSWORD=secret
-            - MYSQL_ROOT_HOST=%
-            - MYSQL_USER=homestead
-            - MYSQL_PASSWORD=secret
-        # healthcheck:
-        #     test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASS
-        volumes:
-            - mysql-data:/var/lib/mysql:delegated
-            - ./conf/mysql:/etc/mysql
+    # db:
+    #     container_name: "mysql"
+    #     image: beercan1989/arm-mysql:5.7
+    #     ports:
+    #         - 3306:3306
+    #     environment:
+    #         - MYSQL_ROOT_PASSWORD=secret
+    #         - MYSQL_ROOT_HOST=%
+    #         - MYSQL_USER=homestead
+    #         - MYSQL_PASSWORD=secret
+    #     # healthcheck:
+    #     #     test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASS
+    #     volumes:
+    #         - mysql-data:/var/lib/mysql
+    #         - ./conf/mysql:/etc/mysql
+    #         - ~/Desktop/dbs:/root/dbs
     redis:
         container_name: "redis"
         image: redis
         ports:
             - 6379:6379
-    web:
-        build: .
-        container_name: "web"
+    php:
+        build: 
+            context: conf/php
+        container_name: "php"
+        volumes:
+            - /Volumes/Code/craft-server:/var/www/craft
+            - /Volumes/Code/content-api:/var/www/api
+            - /Volumes/Code/re-flow-admin:/var/www/admin
+    apache:
+        build: 
+            context: conf/apache2
+        container_name: "apache"
         depends_on:
+            - php
             - db
             - redis
         ports:
             - 80:80
             - 443:443
-            # - 9003:9003
         volumes:
             - /Volumes/Code/craft-server:/var/www/craft
             - /Volumes/Code/content-api:/var/www/api
             - /Volumes/Code/re-flow-admin:/var/www/admin
+         
+    # web:
+    #     build: 
+    #         context: .
+    #         dockerfile: dockerfile.old
+    #     container_name: "web"
+    #     depends_on:
+    #         - db
+    #         - redis
+    #     ports:
+    #         - 80:80
+    #         - 443:443
+    #     volumes:
+    #         - /Volumes/Code/craft-server:/var/www/craft
+    #         - /Volumes/Code/content-api:/var/www/api
+    #         - /Volumes/Code/re-flow-admin:/var/www/admin
 volumes:
     mysql-data:
