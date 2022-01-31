@@ -22,6 +22,7 @@ services:
         image: redis
         ports:
             - 6379:6379
+
     php:
         build: 
             context: conf/php
@@ -30,6 +31,9 @@ services:
             - /Volumes/Code/craft-server:/var/www/craft
             - /Volumes/Code/content-api:/var/www/api
             - /Volumes/Code/re-flow-admin:/var/www/admin
+        extra_hosts:
+            - "apiv1.reflow:172.18.0.4"
+
     apache:
         build: 
             context: conf/apache2
@@ -45,7 +49,7 @@ services:
             - /Volumes/Code/craft-server:/var/www/craft
             - /Volumes/Code/content-api:/var/www/api
             - /Volumes/Code/re-flow-admin:/var/www/admin
-         
+
     # web:
     #     build: 
     #         context: .
