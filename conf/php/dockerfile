@@ -6,7 +6,8 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 RUN install-php-extensions gd xdebug ds pdo_mysql redis
 
 # Use the default development configuration
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+# RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+COPY php.ini /usr/local/etc/php/php.ini
 
 # copy pool config
 COPY www.conf /usr/local/etc/php-fpm.d

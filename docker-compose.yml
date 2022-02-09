@@ -17,11 +17,14 @@ services:
     #         - mysql-data:/var/lib/mysql
     #         - ./conf/mysql:/etc/mysql
     #         - ~/Desktop/dbs:/root/dbs
+    
     redis:
         container_name: "redis"
         image: redis
         ports:
             - 6379:6379
+        networks:
+            - devnet
 
     php:
         build: 
@@ -32,7 +35,9 @@ services:
             - /Volumes/Code/content-api:/var/www/api
             - /Volumes/Code/re-flow-admin:/var/www/admin
         extra_hosts:
-            - "apiv1.reflow:172.18.0.4"
+            - "apiv1.reflow:172.20.0.10"
+        networks:
+            - devnet
 
     apache:
         build: 
@@ -49,6 +54,9 @@ services:
             - /Volumes/Code/craft-server:/var/www/craft
             - /Volumes/Code/content-api:/var/www/api
             - /Volumes/Code/re-flow-admin:/var/www/admin
+        networks:
+            devnet:
+                ipv4_address: 172.20.0.10
 
     # web:
     #     build: 
@@ -67,3 +75,9 @@ services:
     #         - /Volumes/Code/re-flow-admin:/var/www/admin
 volumes:
     mysql-data:
+
+networks:
+  devnet:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
