@@ -36,6 +36,7 @@ services:
             - /Volumes/Code/re-flow-admin:/var/www/admin
         extra_hosts:
             - "apiv1.reflow:172.20.0.10"
+            - "develop.reflow:172.20.0.10"
         networks:
             - devnet
 
