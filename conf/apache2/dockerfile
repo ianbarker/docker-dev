@@ -11,6 +11,9 @@ COPY ssl.conf /usr/local/apache2/conf/extra/httpd-ssl.conf
 COPY ssl/server.crt /usr/local/apache2/ssl/server.crt
 COPY ssl/server.key /usr/local/apache2/ssl/server.key
 
+COPY ssl/develop.reflow.crt /usr/local/apache2/ssl/develop.reflow.crt
+COPY ssl/develop.reflow.key /usr/local/apache2/ssl/develop.reflow.key
+
 # copy site configs
 COPY sites/*.conf /usr/local/apache2/vhosts/
 
