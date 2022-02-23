@@ -31,4 +31,4 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 
 RUN apt-get update && apt-get install -y \
     git \
-    unzip
+    unzip \

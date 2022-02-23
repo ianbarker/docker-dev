@@ -1,6 +1,17 @@
 version: "3.9"
 
 services:
+    dns:
+        container_name: "dns"
+        build:
+            context: conf/dns
+        cap_add:
+            - NET_ADMIN
+        networks:
+            devnet:
+                ipv4_address: 172.20.0.11
+
+
     db:
         container_name: "mysql"
         image: mysql:5.7
@@ -16,6 +27,9 @@ services:
         volumes:
             - mysql-data:/var/lib/mysql
             - ./conf/mysql:/etc/mysql
+        networks:
+            - devnet
+        dns: 172.20.0.11
     
     redis:
         container_name: "redis"
@@ -26,23 +40,22 @@ services:
             - devnet
 
     php:
+        container_name: "php"
         build: 
             context: conf/php
-        container_name: "php"
         volumes:
             - /Volumes/Code/craft-server:/var/www/craft
             - /Volumes/Code/content-api:/var/www/api
             - /Volumes/Code/re-flow-admin:/var/www/admin
-        extra_hosts:
-            - "apiv1.reflow:172.20.0.10"
-            - "develop.reflow:172.20.0.10"
+            - /var/www/craft/core/develop/current/src
         networks:
             - devnet
+        dns: 172.20.0.11
 
     apache:
+        container_name: "apache"
         build: 
             context: conf/apache2
-        container_name: "apache"
         depends_on:
             - php
             - db
@@ -54,6 +67,7 @@ services:
             - /Volumes/Code/craft-server:/var/www/craft
             - /Volumes/Code/content-api:/var/www/api
             - /Volumes/Code/re-flow-admin:/var/www/admin
+            - /var/www/craft/core/develop/current/src
         networks:
             devnet:
                 ipv4_address: 172.20.0.10
