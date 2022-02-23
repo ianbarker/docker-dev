@@ -5,6 +5,10 @@ GREEN='\033[0;32m';
 YELLOW='\033[1;33m';
 NC='\033[0m'; # No Color
 
+CURRENT_DIR=$PWD;
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd );
+cd $SCRIPT_DIR;
+
 if [ ! -f "myCa.key" ]; then
     echo -e "${YELLOW}Generating CA files${NC}"
     ######################
@@ -39,7 +43,7 @@ fi
 # Create CA-signed certs
 ######################
 
-NAME=$1.reflow # Use your own domain name
+NAME=$1 # Use your own domain name
 # Generate a private key
 openssl genrsa -out $NAME.key 2048
 # Create a certificate-signing request
@@ -74,7 +78,10 @@ openssl x509 \
     -sha256 \
     -extfile $NAME.ext
 
-mv $NAME.crt certs
-mv $NAME.key certs
+mv $NAME.crt certs/
+mv $NAME.key certs/
 rm $NAME.csr
 rm $NAME.ext
+
+echo -e "${GREEN}Generated SSL certificates for ${NAME}${NC}";
+cd $CURRENT_DIR;
