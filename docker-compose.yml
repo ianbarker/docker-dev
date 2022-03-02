@@ -14,6 +14,7 @@ services:
     db:
         container_name: "mysql"
         image: mysql:5.7
+        platform: linux/amd64
         ports:
             - 3306:3306
         environment:
@@ -21,11 +22,11 @@ services:
             - MYSQL_ROOT_HOST=%
             - MYSQL_USER=homestead
             - MYSQL_PASSWORD=secret
-        # healthcheck:
-        #     test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASS
+            - DEBUG_COMPOSE_ENTRYPOINT=1
+            - MYSQL_GENERAL_LOG=1
         volumes:
             - mysql-data:/var/lib/mysql
-            - ./conf/mysql:/etc/mysql
+            - ./conf/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
         networks:
             - devnet
     
@@ -54,10 +55,6 @@ services:
         container_name: "apache"
         build: 
             context: conf/apache2
-        depends_on:
-            - php
-            - db
-            - redis
         ports:
             - 80:80
             - 443:443
@@ -77,4 +74,4 @@ networks:
   devnet:
     ipam:
       config:
-        - subnet: 172.20.0.0/16
+        - subnet: 172.20.0.0/24
