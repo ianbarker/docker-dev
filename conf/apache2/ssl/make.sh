@@ -50,7 +50,7 @@ openssl genrsa -out $NAME.key 2048
 openssl req \
     -new \
     -key $NAME.key \
-    -subj "/C=UK/ST=Devon/L=Exeter/O=Reflow/CN=$NAME.reflow" \
+    -subj "/C=UK/ST=Devon/L=Exeter/O=Reflow/CN=*.$NAME" \
     -out $NAME.csr
 # Create a config file for the extensions
 >$NAME.ext cat <<-EOF

@@ -11,7 +11,6 @@ services:
             devnet:
                 ipv4_address: 172.20.0.11
 
-
     db:
         container_name: "mysql"
         image: mysql:5.7
@@ -29,7 +28,6 @@ services:
             - ./conf/mysql:/etc/mysql
         networks:
             - devnet
-        dns: 172.20.0.11
     
     redis:
         container_name: "redis"
